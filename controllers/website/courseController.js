@@ -53,6 +53,42 @@ const offlineCourseView = async (req, res) => {
 
 
 
+const fetchOnlineCategory = async (req, res) => {
+    try {
+        const categoryData = await onlineCategoryModel.find();
+        res.send({
+            status: 1,
+            msg: "category data",
+            categoryData,
+        });
+    } catch (err) {
+        res.send({
+            status: 0,
+            msg: "something went wrong",
+            err,
+        });
+    }
+};
 
 
-module.exports = { onlineCourseView, offlineCourseView }
+
+const fetchOfflineCategory = async (req, res) => {
+    try {
+        const categoryData = await offlineCategoryModel.find();
+        res.send({
+            status: 1,
+            msg: "category data",
+            categoryData,
+        });
+    } catch (err) {
+        res.send({
+            status: 0,
+            msg: "something went wrong",
+            err,
+        });
+    }
+};
+
+
+
+module.exports = { onlineCourseView, offlineCourseView, fetchOnlineCategory, fetchOfflineCategory }

@@ -115,4 +115,14 @@ const removedFromBookedSessions = async (req, res) => {
     }
 }
 
-module.exports = { enquiryAdd, enquiryCityView, bookSession, removedFromBookedSessions };
+
+const enquiryStateView = async (req, res) => {
+    const enquiryStateData = await stateModel.find()
+    res.send({
+        status: 1,
+        msg: 'enquiry state data',
+        enquiryStateData
+    })
+}
+
+module.exports = { enquiryAdd, enquiryCityView, bookSession, removedFromBookedSessions,enquiryStateView };

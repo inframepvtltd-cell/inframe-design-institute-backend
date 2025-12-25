@@ -1,6 +1,5 @@
 const express = require('express')
-const { enquiryAdd, enquiryCityView, bookSession, viewBookedSession } = require('../../controllers/website/EnquiryController')
-const { enquiryStateView } = require('../../controllers/admin/AdminEnquiryController')
+const { enquiryAdd, enquiryCityView, bookSession, enquiryStateView } = require('../../controllers/website/EnquiryController')
 
 const EnquiryRoute = express.Router()
 

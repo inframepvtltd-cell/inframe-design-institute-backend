@@ -1,5 +1,5 @@
 const express = require('express')
-const { fetchOnlineCategory, fetchOfflineCategory } = require('../../controllers/admin/adminCategoryController')
+const { fetchOnlineCategory, fetchOfflineCategory } = require('../../controllers/website/courseController')
 
 
 const categoryRoute = express.Router()
