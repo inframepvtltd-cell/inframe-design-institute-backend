@@ -1,14 +1,11 @@
-const express = require('express')
-const { addToCart, cartEntryView, removeFromCart } = require('../../controllers/website/cartController')
-const { checkToken } = require('../../middleware/checkTokenMid')
+import express from 'express';
+import { addToCart, cartEntryView, removeFromCart } from '../../controllers/website/cartController.js';
+import { checkToken } from '../../middleware/checkTokenMid.js';
 
-const cartRoute = express.Router()
+const cartRoute = express.Router();
 
-cartRoute.post('/add-to-cart', checkToken, addToCart)
-cartRoute.post('/view-cart', checkToken, cartEntryView)
-cartRoute.post('/remove-from-cart', checkToken, removeFromCart)
+cartRoute.post('/add-to-cart', checkToken, addToCart);
+cartRoute.post('/view-cart', checkToken, cartEntryView);
+cartRoute.post('/remove-from-cart', checkToken, removeFromCart);
 
-
-
-
-module.exports = { cartRoute }
+export { cartRoute };

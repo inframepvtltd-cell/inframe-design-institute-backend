@@ -1,13 +1,13 @@
-const Razorpay = require("razorpay");
-const { onlineCourseModel } = require("../../models/onlineCourseModel");
-const { offlineCourseModel } = require("../../models/offlineCourseModel");
-const { userModel } = require("../../models/userModel");
-const { cartModel } = require("../../models/cartModel");
+import Razorpay from "razorpay";
+import { onlineCourseModel } from "../../models/onlineCourseModel.js";
+import { offlineCourseModel } from "../../models/offlineCourseModel.js";
+import { userModel } from "../../models/userModel.js";
+import { cartModel } from "../../models/cartModel.js";
 
 // const razorpay = new Razorpay({
 //     key_id: process.env.RAZORPAY_KEY_ID,
 //     key_secret: process.env.RAZORPAY_KEY_SECRET
-// })
+// });
 
 const addToCart = async (req, res) => {
     const { id, itemId, main } = req.body;
@@ -25,7 +25,6 @@ const addToCart = async (req, res) => {
                 .populate("courseCategory");
         }
 
-
         const cartObj = {
             userId: id,
             userData: await userModel.findOne({ _id: id }),
@@ -33,65 +32,62 @@ const addToCart = async (req, res) => {
             quantity: 1,
             main
         };
-        const cart = new cartModel(cartObj)
-        const cartRes = await cart.save()
+
+        const cart = new cartModel(cartObj);
+        const cartRes = await cart.save();
+
         res.send({
             status: 1,
-            msg: "added in cart successfully !",
+            msg: "Added in cart successfully!",
             cartRes
         });
-    }
-    catch (err) {
+    } catch (err) {
         res.send({
             status: 0,
-            msg: "addtocart api is running",
+            msg: "Add to cart failed",
             err
         });
     }
 };
 
-
 const cartEntryView = async (req, res) => {
-    const staticPath = process.env.APIBASEURL + '/uploads/coursesImages/'
-    const { id } = req.body
+    const staticPath = process.env.APIBASEURL + '/uploads/coursesImages/';
+    const { id } = req.body;
+
     try {
-        const cartData = await cartModel.find({ userId: id })
+        const cartData = await cartModel.find({ userId: id });
         res.send({
             status: 1,
-            msg: 'all cart entries',
+            msg: 'All cart entries',
             cartData,
             staticPath
-        })
-    }
-    catch (err) {
+        });
+    } catch (err) {
         res.send({
             status: 0,
-            msg: 'failed to fetch cart data',
+            msg: 'Failed to fetch cart data',
             err
-        })
+        });
     }
-
-}
-
+};
 
 const removeFromCart = async (req, res) => {
-    const { id } = req.body
-    const { courseId } = req.body
-    try {
-        const removeCart = await cartModel.deleteOne({ userId: id }, { _id: courseId })
-        res.send({
-            status: 1,
-            msg: 'course remove from cart api',
-            removeCart
-        })
-    }
-    catch (err) {
-        res.send({
-            status: 1,
-            msg: 'something went wrong',
-            err
-        })
-    }
-}
+    const { id, courseId } = req.body;
 
-module.exports = { addToCart, cartEntryView, removeFromCart };
+    try {
+        const removeCart = await cartModel.deleteOne({ userId: id, _id: courseId });
+        res.send({
+            status: 1,
+            msg: 'Course removed from cart',
+            removeCart
+        });
+    } catch (err) {
+        res.send({
+            status: 0,
+            msg: 'Something went wrong',
+            err
+        });
+    }
+};
+
+export { addToCart, cartEntryView, removeFromCart };

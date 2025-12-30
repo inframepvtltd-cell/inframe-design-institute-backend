@@ -1,10 +1,10 @@
-const { Schema, default: mongoose } = require("mongoose")
+import mongoose from "mongoose";
 
 const onlineCourseSchema = new mongoose.Schema({
     courseName: String,
     courseCategory: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'onlineCategory', // 👈 Reference to Category model
+        ref: 'onlineCategory', // Reference to Category model
         required: true
     },
     courseImage: Object,
@@ -24,10 +24,8 @@ const onlineCourseSchema = new mongoose.Schema({
     courseFaqsAnswer: Array,
     courseMetaTitle: String,
     courseMetaDescription: String
-})
+});
 
-const onlineCourseModel = mongoose.model('online-course', onlineCourseSchema)
+const onlineCourseModel = mongoose.model('online-course', onlineCourseSchema);
 
-
-module.exports = { onlineCourseModel }
-
+export { onlineCourseModel };

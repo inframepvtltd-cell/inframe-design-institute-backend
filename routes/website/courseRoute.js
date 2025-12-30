@@ -1,14 +1,9 @@
-const express = require('express')
-const { onlineCourseView, offlineCourseView } = require('../../controllers/website/courseController')
+import express from 'express';
+import { onlineCourseView, offlineCourseView } from '../../controllers/website/courseController.js';
 
+const courseRoute = express.Router();
 
-const courseRoute = express.Router()
+courseRoute.get('/view-online', onlineCourseView);
+courseRoute.get('/view-offline', offlineCourseView);
 
-courseRoute.get('/view-online', onlineCourseView)
-courseRoute.get('/view-offline', offlineCourseView)
-
-
-
-
-
-module.exports = { courseRoute }
+export { courseRoute };

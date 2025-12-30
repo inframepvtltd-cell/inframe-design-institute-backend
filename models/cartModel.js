@@ -1,13 +1,13 @@
-const { default: mongoose, Schema } = require("mongoose");
+import mongoose from "mongoose";
 
-const cartSchema = new Schema({
+const cartSchema = new mongoose.Schema({
     userId: String,
     userData: Object,
     courseDetails: Object,
     quantity: Number,
-    main : String
-})
+    main: String
+});
 
-const cartModel = mongoose.model('cart', cartSchema)
+const cartModel = mongoose.model('cart', cartSchema);
 
-module.exports = { cartModel }
+export { cartModel };

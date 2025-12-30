@@ -1,16 +1,16 @@
-const { default: mongoose } = require("mongoose");
+import mongoose from 'mongoose';
 
-const EnquirySchema = mongoose.Schema({
-    enquiryName: String,
-    enquiryEmail: String,
-    enquiryPhone: String,
-    enquiryState: String,
-    enquiryCity: String,
-    enquiryProgram: String,
-    enquiryCourse: String,
-    enquiryIsMarked: Boolean
-})
+const EnquirySchema = new mongoose.Schema({
+  enquiryName: String,
+  enquiryEmail: String,
+  enquiryPhone: String,
+  enquiryState: String,
+  enquiryCity: String,
+  enquiryProgram: String,
+  enquiryCourse: String,
+  enquiryIsMarked: Boolean,
+});
 
-const enquiryModel = mongoose.model('enquiry', EnquirySchema)
+const enquiryModel = mongoose.model('enquiry', EnquirySchema);
 
-module.exports = { enquiryModel }
+export { enquiryModel };

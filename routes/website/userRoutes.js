@@ -1,11 +1,10 @@
-const express = require('express')
-const { userCreate, otpVerify, userLogin } = require('../../controllers/website/userAuthController')
+import express from 'express';
+import { userCreate, otpVerify, userLogin } from '../../controllers/website/userAuthController.js';
 
-const userRoutes = express.Router()
+const userRoutes = express.Router();
 
-userRoutes.post('/register', userCreate)
-userRoutes.post('/otp-verify', otpVerify)
-userRoutes.post('/login', userLogin)
+userRoutes.post('/register', userCreate);
+userRoutes.post('/otp-verify', otpVerify);
+userRoutes.post('/login', userLogin);
 
-
-module.exports = { userRoutes }
+export { userRoutes };

@@ -1,4 +1,4 @@
-const { Schema, default: mongoose } = require("mongoose")
+import mongoose from "mongoose";
 
 const offlineCourseSchema = new mongoose.Schema({
     courseName: String,
@@ -18,10 +18,8 @@ const offlineCourseSchema = new mongoose.Schema({
     courseFaqsAnswer: Array,
     courseMetaTitle: String,
     courseMetaDescription: String
-})
+});
 
-const offlineCourseModel = mongoose.model('offline-course', offlineCourseSchema)
+const offlineCourseModel = mongoose.model('offline-course', offlineCourseSchema);
 
-
-module.exports = { offlineCourseModel }
-
+export { offlineCourseModel };

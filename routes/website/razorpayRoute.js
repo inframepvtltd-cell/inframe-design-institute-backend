@@ -1,10 +1,9 @@
-const express = require('express')
-const { checkToken } = require('../../middleware/checkTokenMid')
-const { createorderRazor } = require('../../controllers/website/razorPayController')
+import express from 'express';
+import { checkToken } from '../../middleware/checkTokenMid.js';
+import { createorderRazor } from '../../controllers/website/razorPayController.js';
 
-const razorpayRoute = express.Router()
+const razorpayRoute = express.Router();
 
-razorpayRoute.post('/create-order', checkToken, createorderRazor)
+razorpayRoute.post('/create-order', checkToken, createorderRazor);
 
-
-module.exports = { razorpayRoute }
+export { razorpayRoute };

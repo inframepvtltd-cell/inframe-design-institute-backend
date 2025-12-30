@@ -5,11 +5,14 @@ const razorpay = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
+/**
+ * Create Razorpay order for online payment
+ */
 export const createorderRazor = async (req, res) => {
     try {
         const { amount } = req.body;
 
-        // ❌ Validation
+        // Validation
         if (!amount || amount <= 0) {
             return res.status(400).json({
                 success: false,
@@ -17,7 +20,7 @@ export const createorderRazor = async (req, res) => {
             });
         }
 
-        // ✅ Create order
+        // Create order
         const order = await razorpay.orders.create({
             amount: Math.round(amount * 100), // convert to paise
             currency: "INR",

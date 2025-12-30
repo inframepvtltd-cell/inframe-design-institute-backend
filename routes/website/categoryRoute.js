@@ -1,12 +1,9 @@
-const express = require('express')
-const { fetchOnlineCategory, fetchOfflineCategory } = require('../../controllers/website/courseController')
+import express from 'express';
+import { fetchOnlineCategory, fetchOfflineCategory } from '../../controllers/website/courseController.js';
 
+const categoryRoute = express.Router();
 
-const categoryRoute = express.Router()
+categoryRoute.get('/fetch-online-category', fetchOnlineCategory);
+categoryRoute.get('/fetch-offline-category', fetchOfflineCategory);
 
-categoryRoute.get('/fetch-online-category', fetchOnlineCategory)
-categoryRoute.get('/fetch-offline-category', fetchOfflineCategory)
-
-
-
-module.exports = { categoryRoute }
+export { categoryRoute };

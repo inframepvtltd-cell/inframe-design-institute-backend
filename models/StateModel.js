@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+import mongoose from "mongoose";
 
 const StateSchema = mongoose.Schema({
     stateName: String
@@ -7,5 +7,5 @@ const StateSchema = mongoose.Schema({
 const stateModel = mongoose.model('state', StateSchema)
 
 
-module.exports = { stateModel }
+export { stateModel }
 

@@ -1,52 +1,43 @@
-const dotenv = require('dotenv')
-dotenv.config()
-const express = require('express')
-const cors = require('cors')
-const { websiteRoute } = require('./routes/website/webRoutes')
-const connectDB = require('./configs/dbConfig')
+import './configs/env.js'; 
+import express from 'express'
+import cors from 'cors'
+import { websiteRoute } from './routes/website/webRoutes.js'
+import connectDB from './configs/dbConfig.js'
+
+console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
+console.log("RAZORPAY_KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
+
 const app = express()
-app.use(express.json())
 
-app.get('/', (req, res) => {
-    res.send('Inframe Design Institute Backend is running')
-})
-
-
-const allowedOrigins = [
-    'https://www.inframedesigninstitute.com',
-    'https://design-institute.vercel.app',
-    'http://localhost:3000',
-    'http://localhost:3001',
-
-    // 'https://inframe-design-admin.vercel.app',
-    // 'https://design-institute.vercel.app',
-    // 'http://localhost:3000',
-    // 'http://localhost:3001',
-    // 'http://72.60.206.137:9200'
-];
-
-
+const isProduction = process.env.NODE_ENV === 'production'
+const corsWhiteList = isProduction
+    ? ['https://www.inframedesigninstitute.com']
+    : ['http://localhost:3000', 'https://www.inframedesigninstitute.com'];
 
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin) return callback(null, true); // Postman ya server side requests
         // Normalize origin by removing 'www.' and lowercasing
         const normalize = o => o.replace(/^https?:\/\/(www\.)?/, '').toLowerCase();
-        const allowed = allowedOrigins.some(o => normalize(o) === normalize(origin));
+        const allowed = corsWhiteList.some(o => normalize(o) === normalize(origin));
         callback(allowed ? null : new Error('Not allowed by CORS'), allowed);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 }));
 
+app.use(express.json())
 
-
+app.get('/', (req, res) => {
+    res.send('Inframe Design Institute Backend is running')
+})
 
 app.use('/web', websiteRoute)
 
+const PORT = process.env.PORT || 9200;
 connectDB().then(async () => {
-    app.listen(process.env.PORT || 9200, '0.0.0.0', () => {
-        console.log(`✅ Server running on port ${process.env.PORT}`)
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`✅ Server running on port ${PORT}`)
     })
 })
 

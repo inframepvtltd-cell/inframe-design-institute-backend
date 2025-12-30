@@ -1,8 +1,8 @@
-const express = require('express')
-const { webSlider } = require('../../controllers/website/webSliderController')
+import express from 'express';
+import { webSlider } from '../../controllers/website/webSliderController.js';
 
-const sliderRoute = express.Router()
+const sliderRoute = express.Router();
 
-sliderRoute.get('/view',webSlider)
+sliderRoute.get('/view', webSlider);
 
-module.exports={sliderRoute}
+export { sliderRoute };

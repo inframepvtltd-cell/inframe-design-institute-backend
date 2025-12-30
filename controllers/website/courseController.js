@@ -1,12 +1,14 @@
-const { offlineCourseModel } = require("../../models/offlineCourseModel");
-const { onlineCourseModel } = require("../../models/onlineCourseModel")
+import { offlineCourseModel } from "../../models/offlineCourseModel.js";
+import { onlineCourseModel } from "../../models/onlineCourseModel.js";
+import { onlineCategoryModel } from "../../models/onlineCategoryModel.js";
+import { offlineCategoryModel } from "../../models/offlineCategoryModel.js";
 
 const onlineCourseView = async (req, res) => {
     try {
-        const staticPath = process.env.APIBASEURL + "/uploads/coursesImages/"
+        const staticPath = process.env.APIBASEURL + "/uploads/coursesImages/";
         const onlineCourseData = await onlineCourseModel
             .find()
-            .populate("courseCategory", "categoryName");  // courseCategory field ko populate karega, sirf categoryName laayega
+            .populate("courseCategory", "categoryName"); // populate courseCategory, only categoryName
 
         res.send({
             status: 1,
@@ -23,15 +25,13 @@ const onlineCourseView = async (req, res) => {
     }
 };
 
-
 const offlineCourseView = async (req, res) => {
     try {
-
-
-        const staticPath = process.env.APIBASEURL + "/uploads/coursesImages/"
+        const staticPath = process.env.APIBASEURL + "/uploads/coursesImages/";
         const offlineCourseData = await offlineCourseModel
             .find()
-            .populate("courseCategory", "categoryName");  // courseCategory field ko populate karega, sirf categoryName laayega
+            .populate("courseCategory", "categoryName"); // populate courseCategory, only categoryName
+
         res.send({
             status: 1,
             msg: "offline course data",
@@ -41,17 +41,11 @@ const offlineCourseView = async (req, res) => {
     } catch (err) {
         res.send({
             status: 0,
-            msg: "kuch galat ho gaya",
+            msg: "something went wrong",
             err,
         });
     }
 };
-
-
-
-
-
-
 
 const fetchOnlineCategory = async (req, res) => {
     try {
@@ -70,8 +64,6 @@ const fetchOnlineCategory = async (req, res) => {
     }
 };
 
-
-
 const fetchOfflineCategory = async (req, res) => {
     try {
         const categoryData = await offlineCategoryModel.find();
@@ -89,6 +81,4 @@ const fetchOfflineCategory = async (req, res) => {
     }
 };
 
-
-
-module.exports = { onlineCourseView, offlineCourseView, fetchOnlineCategory, fetchOfflineCategory }
+export { onlineCourseView, offlineCourseView, fetchOnlineCategory, fetchOfflineCategory };

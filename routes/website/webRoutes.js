@@ -1,30 +1,23 @@
-const express = require('express')
-const { userRoutes } = require('./userRoutes')
-const { EnquiryRoute } = require('./EnquiryRoutes')
-const { categoryRoute } = require('./categoryRoute')
-const { courseRoute } = require('./courseRoute')
-const { cartRoute } = require('./cartRoute')
-const { metaDataRoute } = require('./metaDataRoute')
-const { sliderRoute } = require('./sliderRoute')
-const { razorpayRoute } = require('./razorpayRoute')
+import express from 'express';
 
-const websiteRoute = express.Router()
+import { userRoutes } from './userRoutes.js';
+import { EnquiryRoute } from './EnquiryRoutes.js';
+import { categoryRoute } from './categoryRoute.js';
+import { courseRoute } from './courseRoute.js';
+import { cartRoute } from './cartRoute.js';
+import { metaDataRoute } from './metaDataRoute.js';
+import { sliderRoute } from './sliderRoute.js';
+import { razorpayRoute } from './razorpayRoute.js';
 
-websiteRoute.use('/user', userRoutes)
-websiteRoute.use('/enquiry', EnquiryRoute)
-websiteRoute.use('/category', categoryRoute)
-websiteRoute.use('/course', courseRoute)
-websiteRoute.use('/cart', cartRoute)
-websiteRoute.use('/meta-data', metaDataRoute)
-websiteRoute.use('/slider', sliderRoute)
-websiteRoute.use('/razorpay', razorpayRoute)
+const websiteRoute = express.Router();
 
+websiteRoute.use('/user', userRoutes);
+websiteRoute.use('/enquiry', EnquiryRoute);
+websiteRoute.use('/category', categoryRoute);
+websiteRoute.use('/course', courseRoute);
+websiteRoute.use('/cart', cartRoute);
+websiteRoute.use('/meta-data', metaDataRoute);
+websiteRoute.use('/slider', sliderRoute);
+websiteRoute.use('/razorpay', razorpayRoute);
 
-
-
-
-
-
-
-
-module.exports = { websiteRoute }
+export { websiteRoute };

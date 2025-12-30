@@ -1,15 +1,16 @@
-const express = require('express')
-const { enquiryAdd, enquiryCityView, bookSession, enquiryStateView } = require('../../controllers/website/EnquiryController')
+import express from 'express';
+import {
+  enquiryAdd,
+  enquiryCityView,
+  enquiryStateView,
+  bookSession,
+} from '../../controllers/website/EnquiryController.js';
 
-const EnquiryRoute = express.Router()
+const EnquiryRoute = express.Router();
 
-EnquiryRoute.post('/add', enquiryAdd)
-EnquiryRoute.get('/view-places', enquiryCityView)
-EnquiryRoute.get('/state-view', enquiryStateView)
-EnquiryRoute.post('/book-session', bookSession)
+EnquiryRoute.post('/add', enquiryAdd);
+EnquiryRoute.get('/view-places', enquiryCityView);
+EnquiryRoute.get('/state-view', enquiryStateView);
+EnquiryRoute.post('/book-session', bookSession);
 
-
-
-
-
-module.exports = { EnquiryRoute }
+export { EnquiryRoute };

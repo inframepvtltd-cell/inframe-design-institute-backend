@@ -1,13 +1,13 @@
-const { default: mongoose } = require("mongoose");
+import mongoose from "mongoose";
 
-const onlineCategorySchema = mongoose.Schema({
+const onlineCategorySchema = new mongoose.Schema({
     categoryName: {
         type: String,
         unique: true,
         required: true,
     }
-})
+});
 
-const onlineCategoryModel = mongoose.model('onlineCategory', onlineCategorySchema)
+const onlineCategoryModel = mongoose.model('onlineCategory', onlineCategorySchema);
 
-module.exports = { onlineCategoryModel }
+export { onlineCategoryModel };
