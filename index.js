@@ -11,8 +11,8 @@ const app = express()
 
 const isProduction = process.env.NODE_ENV === 'production'
 const corsWhiteList = isProduction
-    ? ['https://api.inframedesigninstitute.com']
-    : ['http://localhost:3000', 'https://api.inframedesigninstitute.com'];
+    ? ['https://www.inframedesigninstitute.com']
+    : ['http://localhost:3000', 'https://www.inframedesigninstitute.com'];
 
 app.use(cors({
     origin: (origin, callback) => {
