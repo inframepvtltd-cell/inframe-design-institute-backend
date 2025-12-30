@@ -29,7 +29,7 @@ app.use(cors({
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.send('Inframe Design Institute Backend is running')
+    res.send('Inframe Design Institute Backend is running with cicd')
 })
 
 app.use('/web', websiteRoute)
