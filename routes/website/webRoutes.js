@@ -8,6 +8,8 @@ import { cartRoute } from './cartRoute.js';
 import { metaDataRoute } from './metaDataRoute.js';
 import { sliderRoute } from './sliderRoute.js';
 import { razorpayRoute } from './razorpayRoute.js';
+import { getBlogById, viewAllBlogs, viewBlogBySlug } from '../../controllers/website/blogController.js';
+import { freeResRoute } from './freeResRoute.js';
 
 const websiteRoute = express.Router();
 
@@ -19,5 +21,11 @@ websiteRoute.use('/cart', cartRoute);
 websiteRoute.use('/meta-data', metaDataRoute);
 websiteRoute.use('/slider', sliderRoute);
 websiteRoute.use('/razorpay', razorpayRoute);
+websiteRoute.get('/blogs', viewAllBlogs);
+websiteRoute.get('/blogs/:slug', getBlogById);
+websiteRoute.use('/free-resources', freeResRoute);
+
+
+
 
 export { websiteRoute };

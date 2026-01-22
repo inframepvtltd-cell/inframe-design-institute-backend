@@ -1,8 +1,9 @@
-import './configs/env.js'; 
+import './configs/env.js';
 import express from 'express'
 import cors from 'cors'
 import { websiteRoute } from './routes/website/webRoutes.js'
 import connectDB from './configs/dbConfig.js'
+import { connectPostgres } from './configs/postgresconnection.js';
 
 console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
 console.log("RAZORPAY_KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
@@ -12,7 +13,7 @@ const app = express()
 const isProduction = process.env.NODE_ENV === 'production'
 const corsWhiteList = isProduction
     ? ['https://www.inframedesigninstitute.com']
-    : ['http://localhost:3000', 'https://www.inframedesigninstitute.com'];
+    : ['http://localhost:3000', 'http://localhost:3001', 'https://www.inframedesigninstitute.com'];
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -34,11 +35,24 @@ app.get('/', (req, res) => {
 
 app.use('/web', websiteRoute)
 
+
 const PORT = process.env.PORT || 9200;
-connectDB().then(async () => {
-    app.listen(PORT, '0.0.0.0', () => {
-        console.log(`✅ Server running on port ${PORT}`)
-    })
-})
 
+(async () => {
+    try {
+        // 🔹 MongoDB
+        await connectDB();
 
+        // 🔹 PostgreSQL
+        await connectPostgres();
+
+        // 🔹 Start Server
+        app.listen(PORT, () => {
+            console.log(`🚀 Server running on port ${PORT}`);
+        });
+
+    } catch (error) {
+        console.error('❌ Server startup failed:', error.message);
+        process.exit(1);
+    }
+})();
