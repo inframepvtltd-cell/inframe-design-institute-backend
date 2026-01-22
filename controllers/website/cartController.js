@@ -53,7 +53,6 @@ const addToCart = async (req, res) => {
 const cartEntryView = async (req, res) => {
     const staticPath = process.env.APIBASEURL + '/uploads/coursesImages/';
     const { id } = req.body;
-
     try {
         const cartData = await cartModel.find({ userId: id });
         res.send({
@@ -69,7 +68,8 @@ const cartEntryView = async (req, res) => {
             err
         });
     }
-};
+}
+
 
 const removeFromCart = async (req, res) => {
     const { id, courseId } = req.body;
