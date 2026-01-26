@@ -3,10 +3,9 @@ import express from 'express'
 import cors from 'cors'
 import { websiteRoute } from './routes/website/webRoutes.js'
 import connectDB from './configs/dbConfig.js'
-import { connectPostgres } from './configs/postgresconnection.js';
 
-console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
-console.log("RAZORPAY_KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
+// console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
+// console.log("RAZORPAY_KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
 
 const app = express()
 
@@ -44,7 +43,7 @@ const PORT = process.env.PORT || 9200;
         await connectDB();
 
         // 🔹 PostgreSQL
-        await connectPostgres();
+        // await connectPostgres();
 
         // 🔹 Start Server
         app.listen(PORT, () => {
