@@ -18,13 +18,6 @@ const addToCart = async (req, res) => {
             .select("courseName coursePrice courseCategory courseHeadline courseImage")
             .populate("courseCategory");
 
-        if (!courseData) {
-            courseData = await offlineCourseModel
-                .findOne({ _id: itemId })
-                .select("courseName coursePrice courseCategory courseHeadline courseImage")
-                .populate("courseCategory");
-        }
-
         const cartObj = {
             userId: id,
             userData: await userModel.findOne({ _id: id }),
@@ -89,5 +82,7 @@ const removeFromCart = async (req, res) => {
         });
     }
 };
+
+
 
 export { addToCart, cartEntryView, removeFromCart };
