@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 
 const StateSchema = mongoose.Schema({
-    stateName: String
-})
+  stateName: String,
+});
 
-const stateModel = mongoose.model('state', StateSchema)
+const stateModel = mongoose.model("state", StateSchema);
 
-
-export { stateModel }
-
+export { stateModel };
