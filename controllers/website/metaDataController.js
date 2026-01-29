@@ -1,5 +1,6 @@
 import { offlineCourseModel } from "../../models/offlineCourseModel.js";
 import { onlineCourseModel } from "../../models/onlineCourseModel.js";
+import { studyMaterialModel } from "../../models/studyMaterialModel.js";
 
 const metaDataFetchOnline = async (req, res) => {
     const { slug } = req.params;
@@ -37,4 +38,24 @@ const metaDataFetchOffline = async (req, res) => {
     }
 };
 
-export { metaDataFetchOnline, metaDataFetchOffline };
+
+const metaDataFetchStudyMaterial = async (req, res) => {
+    const { slug } = req.params;
+    try {
+        const materialData = await studyMaterialModel.findOne({ materialSlug: slug });
+        res.send({
+            status: 1,
+            msg: 'material fetched for meta data',
+            materialData
+        });
+
+    } catch (error) {
+        res.send({
+            status: 0,
+            msg: 'something went wrong',
+            error
+        });
+    }
+}
+
+export { metaDataFetchOnline, metaDataFetchOffline, metaDataFetchStudyMaterial };

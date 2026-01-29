@@ -5,23 +5,20 @@ const studeyMaterialSchema = new mongoose.Schema({
     ref: "study-material-category",
   },
   materialTitle: String,
+  metaTitle: String,
+  metaDescription: String,
   materialSlug: String,
   materialPrice: String,
   materialDescription: String,
   materialBannerImage: Object,
   materialPreviewImage: Object,
+  materialBooksDescription: Array,
   materialDetails: String,
   materialSummeries: Array,
   materialFaqs: [
     {
-      questions: String,
+      question: String,
       answer: String,
-    },
-  ],
-  materialBooks: [
-    {
-      title: String,
-      description: String,
     },
   ],
 });
