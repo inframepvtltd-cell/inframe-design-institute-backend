@@ -15,9 +15,11 @@ import {
 } from "../../controllers/website/blogController.js";
 import { freeResRoute } from "./freeResRoute.js";
 import { studyMaterialRoute } from "./studyMaterialRoute.js";
+import paymentRouter from "./payment.route.js";
 
 const websiteRoute = express.Router();
 
+websiteRoute.use("/payment", paymentRouter);
 websiteRoute.use("/user", userRoutes);
 websiteRoute.use("/enquiry", EnquiryRoute);
 websiteRoute.use("/category", categoryRoute);
