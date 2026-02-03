@@ -1,115 +1,89 @@
-import Razorpay from "razorpay";
-import crypto from "crypto";
+import { createOrder, verifyPayment } from "#services/paymentService.js";
+import { offlineCourseModel } from "../../models/offlineCourseModel.js";
+import { onlineCourseModel } from "../../models/onlineCourseModel.js";
 import orderModel from "../../models/orderModel.js";
+import razorpay from "./../../utils/razorpayUtil.js";
 
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+// Create Razorpay order
+export const createOrderController = async (req, res) => {
+  try {
+    const { courseId, id } = req.body;
 
-export const createOrder = async (req, res) => {
-    try {
-        const { id, courseId, amount } = req.body;
-        console.log(amount)
-
-        if (!id || !courseId || !amount) {
-            return res.status(400).json({
-                status: -1,
-                message: "Missing required fields",
-            });
-        }
-
-        const options = {
-            amount: Math.round(amount * 100), // paisa
-            currency: "INR",
-            receipt: `receipt_${Date.now()}`,
-            notes: {
-                id,
-                courseId,
-            },
-        };
-
-        const order = await razorpay.orders.create(options);
-
-        res.status(200).json({
-            status: 1,
-            message: "Order created successfully",
-            order,
-        });
-    } catch (error) {
-        console.error("Create Order Error:", error);
-        res.status(500).json({
-            status: -5,
-            message: "Failed to create order",
-            error: error.message,
-        });
+    if (!courseId && !id) {
+      return res.status(400).json({
+        success: false,
+        message: "courseId and user id is required",
+      });
     }
+
+    let courseRes = await onlineCourseModel.findById(courseId);
+    let courseType = "online";
+
+    if (!courseRes) {
+      courseRes = await offlineCourseModel.findById(courseId);
+      courseType = "offline";
+    }
+
+    if (!courseRes) {
+      throw new Error("Course not found");
+    }
+
+    const amount = Number(courseRes.coursePrice) * 100;
+
+    await orderModel.create({
+      userId: id,
+      courseId,
+      courseType,
+      amount,
+    });
+
+    const order = await razorpay.orders.create({
+      amount,
+      currency: "INR",
+      receipt: `receipt_${Date.now()}`,
+    });
+    res.json(order);
+  } catch (err) {
+    console.error("Create order error:", err);
+    res.status(500).json({
+      success: false,
+      message: err.message || "Failed to create order",
+    });
+  }
 };
 
-
-
+// Verify Razorpay payment
 export const verifyAndSaveOrder = async (req, res) => {
-    try {
-        const {
-            id,
-            courseId,
-            amount,
-            razorpayPaymentId,
-            razorpayOrderId,
-            razorpaySignature,
-        } = req.body;
+  try {
+    const { id } = req.body;
+    const verified = await verifyPayment(req.body);
 
-        if (
-            !id ||
-            !courseId ||
-            !amount ||
-            !razorpayPaymentId ||
-            !razorpayOrderId ||
-            !razorpaySignature
-        ) {
-            return res.status(400).json({
-                status: -1,
-                message: "Missing required fields",
-            });
-        }
+    if (!verified) {
+      await orderModel.updateOne(
+        { userId: id },
+        { $set: { paymentStatus: "failed" } },
+      );
 
-        // 🔐 VERIFY SIGNATURE
-        const body = `${razorpayOrderId}|${razorpayPaymentId}`;
-
-        const expectedSignature = crypto
-            .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-            .update(body)
-            .digest("hex");
-
-        if (expectedSignature !== razorpaySignature) {
-            return res.status(400).json({
-                status: -2,
-                message: "Payment verification failed",
-            });
-        }
-
-        // 💾 SAVE ORDER
-        const newOrder = await orderModel.create({
-            id,
-            courseId,
-            amount: Number(amount),
-            razorpayOrderId,
-            razorpayPaymentId,
-            paymentStatus: "success",
-        });
-
-        res.status(201).json({
-            status: 1,
-            message: "Payment verified & order saved",
-            order: newOrder,
-        });
-    } catch (error) {
-        console.error("Verify Order Error:", error);
-        res.status(500).json({
-            status: -5,
-            message: "Something went wrong",
-            error: error.message,
-        });
+      return res.status(400).json({ success: false });
     }
-};
 
+    await orderModel.updateOne(
+      {
+        userId: id
+      },
+      {
+        $set: {
+          razorpayOrderId: verified.razorpay_order_id,
+          razorpayPaymentId: verified.razorpay_payment_id,
+          razorpaySignature :  verified.razorpay_signature,
+          paymentStatus: "success",
+        },
+      },
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Verify payment error:", err);
+    res.status(500).json({ success: false });
+  }
+};
