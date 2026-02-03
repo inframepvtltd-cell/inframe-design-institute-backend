@@ -15,6 +15,7 @@ import {
 } from "../../controllers/website/blogController.js";
 import { freeResRoute } from "./freeResRoute.js";
 import { studyMaterialRoute } from "./studyMaterialRoute.js";
+import { orderRoute } from "./orderRoute.js";
 
 const websiteRoute = express.Router();
 
@@ -28,5 +29,6 @@ websiteRoute.use("/slider", sliderRoute);
 websiteRoute.use("/razorpay", razorpayRoute);
 websiteRoute.use("/free-resources", freeResRoute);
 websiteRoute.use("/study-material", studyMaterialRoute);
+websiteRoute.use("/order", orderRoute);
 
 export { websiteRoute };

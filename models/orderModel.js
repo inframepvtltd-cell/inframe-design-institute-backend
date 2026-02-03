@@ -4,39 +4,58 @@ const orderSchema = new mongoose.Schema(
     {
         userId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User", // assuming you have a User model
+            ref: "user",
             required: true,
         },
+
+        courseId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+        },
+
+        courseType: {
+            type: String,
+            enum: ["online", "offline"],
+            required: true,
+        },
+
+        amount: {
+            type: Number,
+            required: true,
+        },
+
+        // 🔹 Razorpay fields
         razorpayOrderId: {
             type: String,
             required: true,
         },
+
         razorpayPaymentId: {
             type: String,
+            default: null,
         },
-        amount: {
-            type: Number, // in Rupees
-            required: true,
-        },
-        currency: {
+
+        razorpaySignature: {
             type: String,
-            default: "INR",
+            default: null,
         },
-        status: {
+
+        paymentStatus: {
             type: String,
-            enum: ["CREATED", "PAID", "FAILED"],
-            default: "CREATED",
+            enum: ["pending", "success", "failed"],
+            default: "pending",
         },
-        notes: {
-            type: Object,
-            default: {},
+
+        paymentMethod: {
+            type: String,
+            default: "razorpay",
         },
     },
-    {
-        timestamps: true, // createdAt & updatedAt
-    }
+    { timestamps: true }
 );
 
-const orderModel = mongoose.model("Order", orderSchema);
+// 🔥 Prevent overwrite error (Next.js / nodemon safe)
+const orderModel =
+    mongoose.models.order || mongoose.model("order", orderSchema);
 
 export default orderModel;

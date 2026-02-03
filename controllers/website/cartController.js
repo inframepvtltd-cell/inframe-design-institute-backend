@@ -3,6 +3,7 @@ import { onlineCourseModel } from "../../models/onlineCourseModel.js";
 import { offlineCourseModel } from "../../models/offlineCourseModel.js";
 import { userModel } from "../../models/userModel.js";
 import { cartModel } from "../../models/cartModel.js";
+import { studyMaterialModel } from "../../models/studyMaterialModel.js";
 
 // const razorpay = new Razorpay({
 //     key_id: process.env.RAZORPAY_KEY_ID,
@@ -13,28 +14,59 @@ const addToCart = async (req, res) => {
     const { id, itemId, main } = req.body;
 
     try {
+        // 1️⃣ Find course or material
         let courseData = await onlineCourseModel
             .findOne({ _id: itemId })
             .select("courseName coursePrice courseCategory courseHeadline courseImage")
             .populate("courseCategory");
 
+        if (!courseData) {
+            courseData = await studyMaterialModel.findOne({ _id: itemId });
+        }
+
+        if (!courseData) {
+            return res.send({
+                status: 0,
+                msg: "Item not found"
+            });
+        }
+
+        // 2️⃣ Check if item already in cart
+        const existingCartItem = await cartModel.findOne({
+            userId: id,
+            "courseDetails._id": itemId
+        });
+
+        if (existingCartItem) {
+            existingCartItem.quantity += 1;
+            await existingCartItem.save();
+
+            return res.send({
+                status: 1,
+                msg: "Cart quantity updated",
+                cartRes: existingCartItem
+            });
+        }
+
+        // 3️⃣ Create new cart item
         const cartObj = {
             userId: id,
-            userData: await userModel.findOne({ _id: id }),
+            userData: await userModel.findById(id),
             courseDetails: courseData,
             quantity: 1,
             main
         };
 
-        const cart = new cartModel(cartObj);
-        const cartRes = await cart.save();
+        const cartRes = await cartModel.create(cartObj);
 
         res.send({
             status: 1,
             msg: "Added in cart successfully!",
             cartRes
         });
+
     } catch (err) {
+        console.error(err);
         res.send({
             status: 0,
             msg: "Add to cart failed",
