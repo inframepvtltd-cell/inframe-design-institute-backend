@@ -46,3 +46,19 @@ export const viewStudyMaterials = async (req, res) => {
         });
     }
 }
+
+
+export const viewMetaDataStudyMaterials = async (req, res) => {
+    try {
+        const { slug } = req.params
+        const result = await studyMaterialModel.findOne({ materialSlug: slug }).select(['metaTitle', 'metaDescription'])
+        if (!result) return res.send({ status: -1, msg: 'cannot found study material meta data' })
+        return res.send({
+            status: 1,
+            msg: 'study material meta data',
+            result
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
